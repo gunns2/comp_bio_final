@@ -2,6 +2,7 @@ from sklearn.datasets.samples_generator import make_blobs
 from sklearn.cluster import AffinityPropagation
 import matplotlib.pyplot as plt
 from itertools import cycle
+
 # Make Dummy Data
 centers = [[1, 1], [-1, -1], [1, -1],[-1,1]]
 X, labels_true = make_blobs(n_samples=300, centers=centers, cluster_std=0.50, random_state=0)
