@@ -1,3 +1,4 @@
+from sklearn import metrics
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.cluster import AffinityPropagation
 import matplotlib.pyplot as plt
@@ -7,15 +8,15 @@ from itertools import cycle
 centers = [[1, 1], [-1, -1], [1, -1],[-1,1]]
 X, labels_true = make_blobs(n_samples=300, centers=centers, cluster_std=0.50, random_state=0)
 # Setup Affinity Propagation
-af = AffinityPropagation(preference=-10,verbose=True).fit(X)
+af = AffinityPropagation(preference = -10, verbose=False).fit(X)
 cluster_centers_indices = af.cluster_centers_indices_
 labels = af.labels_
 
 no_clusters = len(cluster_centers_indices)
 
 print('Estimated number of clusters: %d' % no_clusters)
-# Plot exemplars
 
+# Plot exemplars
 plt.close('all')
 plt.figure(1)
 plt.clf()

@@ -28,11 +28,8 @@ def tetra_dict():
 					tetra_dict[nuc1 + nuc2 + nuc3 + nuc4] = 0
 	return tetra_dict
 
-
 def count_tetra(tetra_dict, list1):
 	string = list1[1][1]
-	#for i in range(0,len(list1[1])):
-	#print('string', string)
 	for i in range(0,len(string) - 3):
 		quad = string[i:i+4]
 		tetra_dict[quad] += 1

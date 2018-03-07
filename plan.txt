@@ -1,0 +1,29 @@
+plan for clustering:
+
+give the following each a weight of 1/3:
+
+GC content
+
+tetranucleotide frequency
+	with each having uniform weight 
+
+coverage
+
+
+steps:
+reads generated 
+—->
+aligned to ref genome via Bowtie2
+—->
+coverage calculated via Bedtools
+for each contain: use bedrolls output to come up with weighted average, to use as coverage for each contig
+—->
+log transform of coverage (maybe)
+
+—->
+cluster according to this log transform of coverage
+—->
+then maybe use this information as preferences for affinity propagation using sci-kit, idk binsanity paper does not discuss this, but i’m not sure how to pass clustering information from coverage clusters to GC and tetranuc otherwise
+
+questions:
+what is our similarity function? it seems like we have to choose one, Binsanity uses euclidean distance, maybe mahalanobis is better.
