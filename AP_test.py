@@ -30,4 +30,4 @@ for k, col in zip(range(no_clusters), colors):
     for x in X[class_members]:
         plt.plot([cluster_center[0], x[0]], [cluster_center[1], x[1]], col)
 
-plt.show()
+plt.show()x
