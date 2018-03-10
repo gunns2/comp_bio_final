@@ -5,7 +5,6 @@ from sklearn import metrics
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.cluster import AffinityPropagation
 import matplotlib.pyplot as plt
-from itertools import cycle
 
 def read_coverage_file(filename):
 	d = pd.read_csv(filename, delimiter="\t", header = None, names = ['name', 'depth', 'n', 'size', 'percent'])
@@ -56,7 +55,7 @@ if __name__ == '__main__':
 	print('Estimated number of clusters: %d' % no_clusters)
 
 	#plt.show()
-	plt.savefig('preference-17.png', bbox_inches='tight')
+	plt.savefig('preferenceNoneFS877.png', bbox_inches='tight')
 
 
 
