@@ -24,7 +24,7 @@ def get_cov_per_contig(cov_mat):
 	#cov_small['cov'].plot.hist( bins=100)
 	cov_small['cov'] = cov_small['cov'].astype(float)
 	#print(cov_small.dtypes)
-	cov_small['log_cov'] = np.log(cov_small['cov'])
+	cov_small['log_cov'] = np.log(cov_small['cov'] + 1)
 	#print(cov_small.head())
 	#cov_small['log_cov'].plot.hist( bins=100) #looks way better
 	#plt.show()
@@ -32,7 +32,7 @@ def get_cov_per_contig(cov_mat):
 
 
 if __name__ == '__main__':
-	cov_mat = read_coverage_file('FS849_coverage.txt')
+	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
 	cov_vals = get_cov_per_contig(cov_mat)
 	#print(cov_vals)
 	
@@ -40,11 +40,11 @@ if __name__ == '__main__':
 	X = X.reshape(-1,1)
 
 
-	af = AffinityPropagation(preference = -17, verbose=False).fit(X.reshape(-1, 1) )
+	af = AffinityPropagation(preference = None, verbose=False).fit(X.reshape(-1, 1) )
 	cluster_centers_indices = af.cluster_centers_indices_
 	labels = af.labels_
 
-	cov_vals['log_cov'].plot.hist( bins=100) #looks way better
+	cov_vals['log_cov'].plot.hist( bins=100) #looks way better than non logged
 	
 
 	for i in range(len(cluster_centers_indices)):
