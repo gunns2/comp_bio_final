@@ -91,12 +91,3 @@ if __name__ == '__main__':
 	print(together.head())
 	together.to_csv('dataframe.csv')
 
-
-
-
-
-
-
-
-
-
