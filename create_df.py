@@ -3,6 +3,13 @@ import time
 import numpy as  np
 import pandas as pd
 
+##########################################################
+#changes to be made:
+#makse it so we remove 'genome' row
+#add zeroes for when there is no coverage
+##########################################################
+
+
 def read_fasta(filename):
 	fasta = open(filename)
 	lines = fasta.readlines()
@@ -71,7 +78,6 @@ def create_data_frame(gene, row_dict):
 	
 	for contig in gene[1:]:
 		contig_dict = fill_row(row_dict, contig)
-		
 		row_list.append(contig_dict.copy())
 	df = pd.DataFrame(row_list)
 	return df
@@ -79,6 +85,9 @@ def create_data_frame(gene, row_dict):
 		
 def make_data_frame_from_csv(csv):
 	return pd.read_csv('./' + csv)
+
+
+
 		
 if __name__ == '__main__':
 	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
@@ -91,8 +100,8 @@ if __name__ == '__main__':
 	df_wo_cov = create_data_frame(gene, row_dict)	
 	print(df_wo_cov.head())
 
-	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='outer')
+	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='inner')
 	print(together.head())
-	together.to_csv('dataframe.csv')
+	together.to_csv('dataframe_inner_join.csv')
 	
 
