@@ -68,19 +68,23 @@ def get_cov_per_contig(cov_mat):
 			
 def create_data_frame(gene, row_dict):
 	row_list = []
-	print(len(row_list))
+	
 	for contig in gene[1:]:
 		contig_dict = fill_row(row_dict, contig)
+		
 		row_list.append(contig_dict.copy())
 	df = pd.DataFrame(row_list)
 	return df
 			
 		
+def make_data_frame_from_csv(csv):
+	return pd.read_csv('./' + csv)
+		
 if __name__ == '__main__':
 	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
 	cov_vals = get_cov_per_contig(cov_mat)
 	print(cov_vals.head())
-	print('done with coverage, moving onto gene file')
+	print('done with coverage, moving on to gene file')
 
 	gene = read_fasta('MidCaymanRise_FS877_idba_assembly_fixed.fa')
 	row_dict = row_dict()
@@ -90,4 +94,5 @@ if __name__ == '__main__':
 	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='outer')
 	print(together.head())
 	together.to_csv('dataframe.csv')
+	
 

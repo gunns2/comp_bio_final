@@ -7,6 +7,7 @@ from itertools import cycle
 # Make Dummy Data
 centers = [[1, 1], [-1, -1], [1, -1],[-1,1]]
 X, labels_true = make_blobs(n_samples=300, centers=centers, cluster_std=0.50, random_state=0)
+print(X)
 # Setup Affinity Propagation
 af = AffinityPropagation(preference = -10, verbose=False).fit(X)
 cluster_centers_indices = af.cluster_centers_indices_
@@ -30,4 +31,4 @@ for k, col in zip(range(no_clusters), colors):
     for x in X[class_members]:
         plt.plot([cluster_center[0], x[0]], [cluster_center[1], x[1]], col)
 
-plt.show()x
+plt.show()
