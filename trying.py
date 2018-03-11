@@ -30,15 +30,17 @@ def get_cov_per_contig(cov_mat):
 	return cov_small
 
 
+
 if __name__ == '__main__':
 	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
 	cov_vals = get_cov_per_contig(cov_mat)
 	#print(cov_vals)
 	
+	
 	X = cov_vals.iloc[:, 2].values
 	X = X.reshape(-1,1)
 
-
+	
 	af = AffinityPropagation(preference = None, verbose=False).fit(X.reshape(-1, 1) )
 	cluster_centers_indices = af.cluster_centers_indices_
 	labels = af.labels_
