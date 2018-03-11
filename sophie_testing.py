@@ -1,37 +1,57 @@
 from sklearn import metrics
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.cluster import AffinityPropagation
+from sklearn.metrics.pairwise import euclidean_distances
 import matplotlib.pyplot as plt
 from itertools import cycle
 import pandas as pd
 
 
 
-dataframe = pd.read_csv('dataframe.csv')
-X = dataframe.iloc[:,3:]
-# Setup Affinity Propagation
 
-print(dataframe.head())
-print(X.head())
-X = dataframe.iloc[:,3:].values
+df = pd.read_csv('dataframe_NA_drop.csv')
+X = df.ix[:,['log_cov']].values
 
-af = AffinityPropagation(preference = -10, verbose=False).fit(X)
+
+
+af = AffinityPropagation(preference = -10, max_iter = 4000, verbose=False, damping = 0.95, affinity = 'euclidean', convergence_iter = 400).fit(X)
 cluster_centers_indices = af.cluster_centers_indices_
 labels = af.labels_
-
+df['cov_clusters'] = labels
+n_iter = af.n_iter_
 no_clusters = len(cluster_centers_indices)
-
 print('Estimated number of clusters: %d' % no_clusters)
+print('Number of iterations to converge: %d' % n_iter)
+
+print('########################')
+print('Cluster by GC and tetra_nuc freq per cluster ')
+print('######################## \n')
+
+for cluster in df.cov_clusters.unique():
+	print('cluster: ', cluster)
+	df_sub = df.loc[df['cov_clusters'] == cluster]
+
+	#X = df_sub.ix[:,['GC_percent', 'AAAA']]
+
+	###trying to log all tetranuc values (first multiply by 100, then log)
+	X = df_sub.ix[:,3:]
+	#print(X.head())
+	X = X.values
+	print('length X: ', len(X))
+	af = AffinityPropagation(preference = -25, max_iter = 4000, verbose=False, damping = 0.95, affinity = 'euclidean', convergence_iter = 400).fit(X)
+	cluster_centers_indices = af.cluster_centers_indices_
+	labels = af.labels_
+	n_iter = af.n_iter_
+	no_clusters = len(cluster_centers_indices)
+	print('Estimated number of clusters: %d' % no_clusters)
+	print('Number of iterations to converge: %d' % n_iter, '\n')
 
 
 
-# colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
-# for k, col in zip(range(no_clusters), colors):
-#     class_members = labels == k
-#     cluster_center = X[cluster_centers_indices[k]]
-#     plt.plot(X[class_members, 0], X[class_members, 1], col + '.')
-#     plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col, markeredgecolor='k', markersize=14)
-#     for x in X[class_members]:
-#         plt.plot([cluster_center[0], x[0]], [cluster_center[1], x[1]], col)
+# dataframe.ix[:,['log_cov']].plot.hist( bins=100)
+# for i in range(len(cluster_centers_indices)):
+# 		cluster_center = X[cluster_centers_indices[i]]
+# 		plt.axvline(cluster_center, color='b', linestyle='dashed', linewidth=2)
+# plt.show()
 
-# plt.show()x
+

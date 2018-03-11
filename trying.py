@@ -52,6 +52,7 @@ if __name__ == '__main__':
 		cluster_center = X[cluster_centers_indices[i]]
 		plt.axvline(cluster_center, color='b', linestyle='dashed', linewidth=2)
 		#print('cluster center', cluster_center)
+	
 
 	no_clusters = len(cluster_centers_indices)
 	print('Estimated number of clusters: %d' % no_clusters)

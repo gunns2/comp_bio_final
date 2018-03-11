@@ -3,11 +3,7 @@ import time
 import numpy as  np
 import pandas as pd
 
-##########################################################
-#changes to be made:
-#makse it so we remove 'genome' row
-#add zeroes for when there is no coverage
-##########################################################
+
 
 
 def read_fasta(filename):
@@ -30,7 +26,7 @@ def read_fasta(filename):
 
 def row_dict():
 	row_dict = {}
-	row_dict['name'] = ''
+	row_dict['name'] = 0
 	row_dict['GC_percent'] = 0
 	nuc_list = ['A', 'T', 'C', 'G']
 	for nuc1 in nuc_list:
@@ -40,18 +36,20 @@ def row_dict():
 					row_dict[nuc1 + nuc2 + nuc3 + nuc4] = 0
 	return row_dict
 
-def fill_row(row_dict, contig):
+def fill_row(row_dict, contig):	
 	row_dict['name'] = contig[0][1:-1]
-	
-	#count tetra
+	#count tetra	
 	string = contig[1]
+	length = len(string)
 	for i in range(0,len(string) - 3):
 		quad = string[i:i+4]
 		row_dict[quad] += 1
+	for quad in row_dict:
+		if quad != 'name' and quad != 'GC_percent': 
+			row_dict[quad] = np.log((float(row_dict[quad])/float(length)) * 100)
 
 	#count GC
 	AT,GC = 0,0
-	length = len(string)
 	for ch in string:
 		if ch in ['G','C']:
 			GC += 1	
@@ -102,6 +100,5 @@ if __name__ == '__main__':
 
 	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='inner')
 	print(together.head())
-	together.to_csv('dataframe_inner_join.csv')
-	
+	together.to_csv('dataframe_should_work.csv')
 
