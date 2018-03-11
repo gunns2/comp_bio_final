@@ -2,6 +2,7 @@ import multiprocessing
 import time
 import numpy as  np
 import pandas as pd
+import math
 
 
 
@@ -34,19 +35,26 @@ def row_dict():
 			for nuc3 in nuc_list:
 				for nuc4 in nuc_list:
 					row_dict[nuc1 + nuc2 + nuc3 + nuc4] = 0
+	print(row_dict)
 	return row_dict
+	
 
 def fill_row(row_dict, contig):	
 	row_dict['name'] = contig[0][1:-1]
 	#count tetra	
 	string = contig[1]
 	length = len(string)
+	#print(length)
 	for i in range(0,len(string) - 3):
 		quad = string[i:i+4]
 		row_dict[quad] += 1
+
 	for quad in row_dict:
-		if quad != 'name' and quad != 'GC_percent': 
-			row_dict[quad] = np.log((float(row_dict[quad])/float(length)) * 100)
+		if quad != 'name' and quad != 'GC_percent':
+			if (float(row_dict[quad])/float(length) * 100) < 0:
+				print("gotcha! we're inputting ",float(row_dict[quad])/float(length) * 100,'which is negative!')
+				print('the log function dont work on negatives!')
+			row_dict[quad] = np.log((float(row_dict[quad])/float(length) * 100))
 
 	#count GC
 	AT,GC = 0,0

@@ -16,27 +16,22 @@ def cluster(dataframe):
 	
 	
 	
-	preferences = [0] * 6260
+
 	#X = dataframe.iloc[:,4:262].values
 	#X = X.reshape(-1,1)
+	
+	X = dataframe.iloc[:,3:5].values
 	#print('THIS IS X',X)
+	af = AffinityPropagation(preference = -10, verbose=True,damping=0.95,convergence_iter=400).fit(X)
+	cluster_centers_indices = af.cluster_centers_indices_
+	labels = af.labels_
+	#print(len(cluster_centers_indices))
 	
-	
-	for i in range(100):
-		X = dataframe.iloc[:,(i+6):(i+8)].values
-		
-		af = AffinityPropagation(preference = preferences, verbose=True).fit(X)
-		cluster_centers_indices = af.cluster_centers_indices_
-		labels = af.labels_
+	no_clusters = len(cluster_centers_indices)
 
-		for i in cluster_centers_indices:
-			preferences[i] += 1
-	
-		no_clusters = len(cluster_centers_indices)
-
-		print('Estimated number of clusters: %d' % no_clusters)
-		print('Finished in: ',time.time() -start)
-		print(preferences)
+	print('Estimated number of clusters: %d' % no_clusters)
+	print('Finished in: ',time.time() -start)
+		#print(preferences)
 	# Plot exemplars
 	plt.close('all')
 	plt.figure(1)
@@ -84,7 +79,7 @@ if __name__ == '__main__':
 # 	together.to_csv('dataframe.csv')
 	
 	print('RUNNING CLUSTER')
-	cluster(make_data_frame_from_csv('dataframe.csv'))
+	cluster(make_data_frame_from_csv('dataframe_inner_join.csv'))
 	
 	
 	
