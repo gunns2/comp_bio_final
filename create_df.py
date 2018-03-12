@@ -35,7 +35,6 @@ def row_dict():
 			for nuc3 in nuc_list:
 				for nuc4 in nuc_list:
 					row_dict[nuc1 + nuc2 + nuc3 + nuc4] = 0
-	print(row_dict)
 	return row_dict
 	
 
@@ -51,10 +50,11 @@ def fill_row(row_dict, contig):
 
 	for quad in row_dict:
 		if quad != 'name' and quad != 'GC_percent':
-			if (float(row_dict[quad])/float(length) * 100) < 0:
-				print("gotcha! we're inputting ",float(row_dict[quad])/float(length) * 100,'which is negative!')
+			if (row_dict[quad]%1 != 0):
+				print("gotcha! we're inputting ",row_dict[quad],'which is n!')
+				print(row_dict['name'] , 'quad', quad)
 				print('the log function dont work on negatives!')
-			row_dict[quad] = np.log((float(row_dict[quad])/float(length) * 100))
+			row_dict[quad] = np.log(row_dict[quad]/length * 100)
 
 	#count GC
 	AT,GC = 0,0
@@ -83,7 +83,7 @@ def create_data_frame(gene, row_dict):
 	row_list = []
 	
 	for contig in gene[1:]:
-		contig_dict = fill_row(row_dict, contig)
+		contig_dict = fill_row(row_dict.copy(), contig)
 		row_list.append(contig_dict.copy())
 	df = pd.DataFrame(row_list)
 	return df
@@ -108,5 +108,5 @@ if __name__ == '__main__':
 
 	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='inner')
 	print(together.head())
-	together.to_csv('dataframe_should_work.csv')
+	together.to_csv('df.csv')
 
