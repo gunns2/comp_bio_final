@@ -5,15 +5,12 @@ import pandas as pd
 import math
 
 
-
-
 def read_fasta(filename):
 	fasta = open(filename)
 	lines = fasta.readlines()
 	sequences = []
 	seq = ['','']
-	for i in range(0,len(lines)):
-		
+	for i in range(0,len(lines)):	
 		if lines[i][0] == '>':
 			sequences.append(seq)
 			seq = ['','']
@@ -22,7 +19,6 @@ def read_fasta(filename):
 			seq[1] += lines[i][:-1]
 	sequences.append(seq)	
 	fasta.close()
-	#print(sequences)
 	return sequences
 
 def row_dict():
@@ -40,21 +36,20 @@ def row_dict():
 
 def fill_row(row_dict, contig):	
 	row_dict['name'] = contig[0][1:-1]
+
 	#count tetra	
 	string = contig[1]
 	length = len(string)
+	row_dict['length'] = len(string)
+
 	#print(length)
 	for i in range(0,len(string) - 3):
 		quad = string[i:i+4]
 		row_dict[quad] += 1
 
 	for quad in row_dict:
-		if quad != 'name' and quad != 'GC_percent':
-			if (row_dict[quad]%1 != 0):
-				print("gotcha! we're inputting ",row_dict[quad],'which is n!')
-				print(row_dict['name'] , 'quad', quad)
-				print('the log function dont work on negatives!')
-			row_dict[quad] = np.log(row_dict[quad]/length * 100)
+		if quad != 'name' and quad != 'GC_percent' and quad != 'length':
+			row_dict[quad] = np.log(row_dict[quad]/length * 100 + 1e-7)
 
 	#count GC
 	AT,GC = 0,0
@@ -72,29 +67,22 @@ def get_cov_per_contig(cov_mat):
 	cov_mat['count'] = cov_mat['depth']*cov_mat['n'] #depth * number of columns with said depth 
 	cov_count = cov_mat.groupby(['name','size'], as_index = False).sum() #group by contig & size to preserve size
 	cov_count['cov'] = cov_count['count']/cov_count['n']
-	cov_small = cov_count.loc[:,['name','cov']] #we only need contig number and coverage now
+	cov_small = cov_count.loc[:,['name','cov', 'n']] #we only need contig number and coverage now
 	cov_small['cov'] = cov_small['cov'].astype(float)
-	cov_small['log_cov'] = np.log(cov_small['cov'] + 1)
-
+	cov_small['log_cov'] = np.log(cov_small['cov'] + 1e-7)
 	return cov_small
-
 			
 def create_data_frame(gene, row_dict):
 	row_list = []
-	
 	for contig in gene[1:]:
 		contig_dict = fill_row(row_dict.copy(), contig)
 		row_list.append(contig_dict.copy())
 	df = pd.DataFrame(row_list)
-	return df
-			
+	return df			
 		
 def make_data_frame_from_csv(csv):
 	return pd.read_csv('./' + csv)
 
-
-
-		
 if __name__ == '__main__':
 	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
 	cov_vals = get_cov_per_contig(cov_mat)
