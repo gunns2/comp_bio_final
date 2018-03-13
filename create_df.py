@@ -84,17 +84,17 @@ def make_data_frame_from_csv(csv):
 	return pd.read_csv('./' + csv)
 
 if __name__ == '__main__':
-	cov_mat = read_coverage_file('E23_FS877_coverage.txt')
+	cov_mat = read_coverage_file('FS851_coverage.txt')
 	cov_vals = get_cov_per_contig(cov_mat)
 	print(cov_vals.head())
 	print('done with coverage, moving on to gene file')
 
-	gene = read_fasta('MidCaymanRise_FS877_idba_assembly_fixed.fa')
+	gene = read_fasta('MidCaymanRise_FS851_idba_assembly_fixed.fa')
 	row_dict = row_dict()
 	df_wo_cov = create_data_frame(gene, row_dict)	
 	print(df_wo_cov.head())
 
 	together = cov_vals.merge(df_wo_cov, left_on='name', right_on='name', how='inner')
 	print(together.head())
-	together.to_csv('df.csv')
+	together.to_csv('df_851.csv')
 
