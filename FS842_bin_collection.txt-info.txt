@@ -1,0 +1,10 @@
+Bin_12	anvi-interactive	#1c8706
+Bin_11	anvi-interactive	#048e83
+Bin_10	anvi-interactive	#9b0308
+Bin_7	anvi-interactive	#991f0f
+Bin_6	anvi-interactive	#09066b
+Bin_5	anvi-interactive	#4a0e93
+Bin_4	anvi-interactive	#05770f
+Bin_3	anvi-interactive	#4d008c
+Bin_9	anvi-interactive	#db0fd4
+Bin_8	anvi-interactive	#ce960a
